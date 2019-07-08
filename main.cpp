@@ -1,35 +1,33 @@
 #include <iostream>
-#include <cmath>
+#include "cstdint"
+
+using namespace std;
 
 namespace GBLesson {
-    class Power
-    {
+    class RGBA {
     private:
-        int val;
-        int coef;
+        uint8_t m_red;
+        uint8_t m_green;
+        uint8_t m_blue;
+        uint8_t m_alpha;
     public:
-        void set (int value, int power)
+        RGBA(
+                uint8_t red,
+                uint8_t green,
+                uint8_t blue,
+                uint8_t alpha = 255
+        ) : m_red(red), m_green(green), m_blue(blue), m_alpha(alpha) {}
+        void print()
         {
-            val = value;
-            coef = power;
+            cout<<"( "<<(int)m_red<<", "<<(int)m_green<<", "<<(int)m_blue<<", "<<(int)m_alpha<<" )"<<endl;
         }
-        void calculate ()
-        {
-            std::cout << pow(val, coef) << std::endl;
-        }
-        Power() = default;
     };
 }
 
 int main() {
-    GBLesson::Power power = *new GBLesson::Power();
-    power.set(2, 3);
-    power.calculate();
-    power.set(3, 3);
-    power.calculate();
-    power.set(4, 2);
-    power.calculate();
-    power.set(5, 5);
-    power.calculate();
+    GBLesson::RGBA color1(25, 25, 25, 255);
+    color1.print();
+    GBLesson::RGBA color2(13, 14, 5);
+    color2.print();
     return 0;
 }
