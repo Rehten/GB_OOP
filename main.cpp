@@ -1,33 +1,109 @@
 #include <iostream>
 #include "cstdint"
+#include <array>
 
 using namespace std;
 
 namespace GBLesson {
-    class RGBA {
+    class StackFrame
+    {
     private:
-        uint8_t m_red;
-        uint8_t m_green;
-        uint8_t m_blue;
-        uint8_t m_alpha;
+        StackFrame* stack_frame = nullptr;
+        int number;
     public:
-        RGBA(
-                uint8_t red,
-                uint8_t green,
-                uint8_t blue,
-                uint8_t alpha = 255
-        ) : m_red(red), m_green(green), m_blue(blue), m_alpha(alpha) {}
+        int const get_number()
+        {
+            return number;
+        }
+        StackFrame* get_stack_frame()
+        {
+            return stack_frame;
+        }
+        StackFrame(int value, StackFrame* prev) : number(value), stack_frame(prev) {}
+    };
+
+    class Stack
+    {
+    private:
+        array<StackFrame*, 10> frames = {};
+        int count = 0;
+    public:
+        Stack() {
+            for (auto frame : frames)
+            {
+                frame = nullptr;
+            }
+        }
+        ~Stack() {
+            cout << "Stack destructed" << endl;
+        }
+
+        bool push(StackFrame* new_frame)
+        {
+            if (count != 10)
+            {
+                frames[count] = new_frame;
+                count++;
+
+                return true;
+            }
+            else
+            {
+                cout << "Error! Stack size is only 10 frames!" << endl;
+                return false;
+            }
+        }
+
+        int pop()
+        {
+            if (count != 0) {
+                count--;
+                int rslt{frames[count]->get_number()};
+                delete(frames[count]);
+                frames[count] = nullptr;
+
+                return rslt;
+            }
+            else
+            {
+                cout << "Error! Stack is empty!!!" << endl;
+                return -1;
+            }
+        }
+
         void print()
         {
-            cout<<"( "<<(int)m_red<<", "<<(int)m_green<<", "<<(int)m_blue<<", "<<(int)m_alpha<<" )"<<endl;
+            cout << "( ";
+            for (int i = 0; i != count; i++)
+            {
+                cout << frames[i]->get_number();
+                if (i != count - 1)
+                {
+                    cout << ", ";
+                }
+            }
+            cout << " )";
         }
     };
 }
 
+using namespace GBLesson;
+
 int main() {
-    GBLesson::RGBA color1(25, 25, 25, 255);
-    color1.print();
-    GBLesson::RGBA color2(13, 14, 5);
-    color2.print();
+    Stack first_stack{*new Stack()};
+    auto ff1 = new StackFrame(3, nullptr);
+    first_stack.push(ff1);
+    auto ff2 = new StackFrame(4, ff1);
+    first_stack.push(ff2);
+    auto ff3 = new StackFrame(5, ff2);
+    first_stack.push(ff3);
+    auto ff4 = new StackFrame(6, ff3);
+    first_stack.push(ff4);
+
+    first_stack.pop();
+    auto ff5 = new StackFrame(93, ff3);
+    first_stack.push(ff5);
+
+    first_stack.print();
     return 0;
 }
