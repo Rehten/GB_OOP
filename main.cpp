@@ -29,13 +29,18 @@ namespace GBLesson {
         int count = 0;
     public:
         Stack() {
+            this->reset();
+        }
+        ~Stack() {
+            cout << endl << "Stack destructed" << endl;
+        }
+
+        void reset()
+        {
             for (auto frame : frames)
             {
                 frame = nullptr;
             }
-        }
-        ~Stack() {
-            cout << "Stack destructed" << endl;
         }
 
         bool push(StackFrame* new_frame)
