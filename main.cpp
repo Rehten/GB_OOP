@@ -4,67 +4,52 @@
 
 using namespace std;
 
-class Person
-{
-protected:
-    int name{1};
-    int age{2};
-    int sex{3};
-    int weight{4};
-public:
-    int get_name() const
-    {
-        return name;
-    };
-    void set_name(int new_name)
-    {
-        name = new_name;
-    };
-    int get_age() const
-    {
-        return age;
-    };
-    void set_age(int new_age)
-    {
-        age = new_age;
-    };
-    int get_sex() const
-    {
-        return sex;
-    };
-    void set_sex(int new_sex)
-    {
-        sex = new_sex;
-    };
-    int get_weight() const
-    {
-        return weight;
-    };
-    void set_weight(int new_weight)
-    {
-        weight = new_weight;
-    };
-};
-
-class Student: public Person
+class Fruit
 {
 private:
-    int age_studying{5};
+    string name = "Fruit";
+protected:
+    string color;
+    Fruit(string clr): color(move(clr)) {}
 public:
-    int get_age_studying() const
+    string get_color() const
     {
-        return age_studying;
-    };
-    void set_age_studying(int new_age_studying)
-    {
-        age_studying = new_age_studying;
-    };
+        return color;
+    }
+};
+
+class Banana: public Fruit
+{
+private:
+    string name = "Banana";
+public:
+    Banana(string clr): Fruit(move(clr)) {}
+};
+
+class Apple: public Fruit
+{
+private:
+    string name = "Apple";
+public:
+    Apple(string clr): Fruit(move(clr)) {}
+};
+
+class GrannySmith: public Apple
+{
+private:
+    string name = "GrannySmith";
+public:
+    GrannySmith(string clr): Apple(move(clr)) {}
 };
 
 int main()
 {
-    Student student;
-    cout << student.get_age() << " " << student.get_name() << " " << student.get_sex() << " " << student.get_weight()
-    << " " << student.get_age_studying() << endl;
+    Banana banana("yellow");
+    cout << banana.get_color() << endl;
+    Apple apple("green");
+    cout << apple.get_color() << endl;
+    GrannySmith granny_smith("lightgreen");
+    cout << granny_smith.get_color() << endl;
+
     return 0;
 }
