@@ -17,7 +17,7 @@ public:
         return cur_num;
     };
     int next() const {
-        cur_num = cur_num + 1;
+        cur_num = rand();
 
         return cur_num;
     };
@@ -28,7 +28,7 @@ public:
 
 int main()
 {
-    rand_generator rndm(23);
+    rand_generator rndm(rand());
     for (int i = 0; i != 10; i++)
     {
         cout << rndm.current() << ((i != 9) ? " -> " : "");
