@@ -1,56 +1,109 @@
 #include <iostream>
 #include <vector>
 
-class Car
+class Fractal
 {
 public:
-    std::string company;
-    std::string model;
-    Car(std::string cmp, std::string mdl) : company(std::move(cmp)), model(std::move(mdl)) {
-        std::cout << "Car" << std::endl;
-    };
-    virtual ~Car() = default;
+    virtual ~Fractal() = default;
+    virtual float operator+(Fractal& two) = 0;
+    virtual float operator-(Fractal& two) = 0;
+    virtual float operator*(Fractal& two) = 0;
+    virtual float operator/(Fractal& two) = 0;
+    virtual bool operator==(Fractal& two) = 0;
+    virtual bool operator!=(Fractal& two) = 0;
+    virtual bool operator>(Fractal& two) = 0;
+    virtual bool operator<(Fractal& two) = 0;
+    virtual bool operator>=(Fractal& two) = 0;
+    virtual bool operator<=(Fractal& two) = 0;
+    virtual float operator-() = 0;
 };
 
-class PassengerCar: virtual public Car
+class SimpleFractal: public Fractal
 {
 public:
-    PassengerCar(std::string cmp, std::string mdl) : Car(std::move(cmp), std::move(mdl)) {
-        std::cout << "PassengerCar" << std::endl;
-    }
-    ~PassengerCar() override = default;
-};
-
-class Bus: virtual public Car
-{
-public:
-    Bus(std::string cmp, std::string mdl) : Car(std::move(cmp), std::move(mdl)) {
-        std::cout << "Bus" << std::endl;
-    }
-    ~Bus() override = default;
-};
-
-class Minivan: public PassengerCar, public Bus
-{
-public:
-    Minivan(std::string cmp, std::string mdl) :
-    Car(std::move(cmp), std::move(mdl)),
-    Bus(std::move(cmp), std::move(mdl)),
-    PassengerCar(std::move(cmp), std::move(mdl))
+    int low_num;
+    int high_num;
+    SimpleFractal(int l_n, int h_n): low_num(l_n), high_num(h_n) {};
+    virtual float operator+(SimpleFractal& sec)
     {
-        std::cout << "Minivan" << std::endl;
+        return (float)high_num/(float)low_num + (float)sec.high_num/(float)sec.low_num;
+    };
+    virtual float operator-(SimpleFractal& sec) {
+        return (float)high_num/(float)low_num - (float)sec.high_num/(float)sec.low_num;
+    };
+    virtual float operator*(SimpleFractal& sec) {
+        return (float)high_num/(float)low_num * (float)sec.high_num/(float)sec.low_num;
+    };
+    virtual float operator/(SimpleFractal& sec) {
+        return ((float)high_num/(float)low_num) / ((float)sec.high_num/(float)sec.low_num);
+    };
+    virtual bool operator==(SimpleFractal& sec) {
+        return (float)high_num/(float)low_num - (float)sec.high_num/(float)sec.low_num == 0;
+    };
+    virtual bool operator!=(SimpleFractal& sec) {
+        return (float)high_num/(float)low_num - (float)sec.high_num/(float)sec.low_num != 0;
+    };
+    virtual bool operator>(SimpleFractal& sec) {
+        return (float)high_num/(float)low_num - (float)sec.high_num/(float)sec.low_num > 0;
+    };
+    virtual bool operator<(SimpleFractal& sec) {
+        return (float)high_num/(float)low_num - (float)sec.high_num/(float)sec.low_num < 0;
+    };
+    virtual bool operator>=(SimpleFractal& sec) {
+        return !(*this < sec);
+    };
+    virtual bool operator<=(SimpleFractal& sec) {
+        return !(*this > sec);
     }
-    ~Minivan() override = default;
+    virtual float operator-() {
+        return 0.00;
+    };
+};
+
+class MixedFractal: public Fractal
+{
+public:
+    int decimal;
+    int low_num;
+    int high_num;
+    MixedFractal(int dc, int l_n, int h_n): decimal(dc), low_num(l_n), high_num(h_n) {};
+    virtual float operator+(MixedFractal& sec)
+    {
+        return ((float)decimal + (float)high_num/(float)low_num) + ((float)sec.decimal + (float)sec.high_num/(float)sec.low_num);
+    };
+    virtual float operator-(MixedFractal& sec) {
+        return ((float)decimal + (float)high_num/(float)low_num) - ((float)sec.decimal + (float)sec.high_num/(float)sec.low_num);
+    };
+    virtual float operator*(MixedFractal& sec) {
+        return ((float)decimal + (float)high_num/(float)low_num) * ((float)sec.decimal + (float)sec.high_num/(float)sec.low_num);
+    };
+    virtual float operator/(MixedFractal& sec) {
+        return ((float)decimal + (float)high_num/(float)low_num) / ((float)sec.decimal + (float)sec.high_num/(float)sec.low_num);
+    };
+    virtual bool operator==(MixedFractal& sec) {
+        return (float)decimal - (float)sec.decimal + (float)high_num/(float)low_num - (float)sec.high_num/(float)sec.low_num == 0;
+    };
+    virtual bool operator!=(MixedFractal& sec) {
+        return (float)decimal - (float)sec.decimal + (float)high_num/(float)low_num - (float)sec.high_num/(float)sec.low_num != 0;
+    };
+    virtual bool operator>(MixedFractal& sec) {
+        return (float)decimal - (float)sec.decimal + (float)high_num/(float)low_num - (float)sec.high_num/(float)sec.low_num > 0;
+    };
+    virtual bool operator<(MixedFractal& sec) {
+        return (float)decimal - (float)sec.decimal + (float)high_num/(float)low_num - (float)sec.high_num/(float)sec.low_num < 0;
+    };
+    virtual bool operator>=(MixedFractal& sec) {
+        return !(*this < sec);
+    };
+    virtual bool operator<=(MixedFractal& sec) {
+        return !(*this > sec);
+    };
+    virtual float operator-() {
+        return 0.00;
+    };
 };
 
 int main() {
-    std::cout << "Car initialize: " << std::endl;
-    Car car("Hundai", "po179xx");
-    std::cout << "PassengerCar initialize: " << std::endl;
-    PassengerCar pas_car("Lada", "ka1ina");
-    std::cout << "Bus initialize: " << std::endl;
-    Bus bus("Detstvo", "u98q");
-    std::cout << "Minivan initialize: " << std::endl;
-    Minivan minivan("Unico", "xsl3m");
+
     return 0;
 }
