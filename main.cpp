@@ -1,69 +1,56 @@
 #include <iostream>
 #include <vector>
 
-using namespace std;
-
-class Figure
+class Car
 {
 public:
-    Figure() = default;
-    virtual float area () = 0;
+    std::string company;
+    std::string model;
+    Car(std::string cmp, std::string mdl) : company(std::move(cmp)), model(std::move(mdl)) {
+        std::cout << "Car" << std::endl;
+    };
+    virtual ~Car() = default;
 };
 
-class Parallelogram: public Figure
+class PassengerCar: virtual public Car
 {
-protected:
-    float width;
-    float height;
-    float sin_angle;
 public:
-    Parallelogram(float wdth, float hght, float sin_ngl) : width(wdth), height(hght), sin_angle(sin_ngl) {}
-    float area () override {
-        return width * height * sin_angle;
+    PassengerCar(std::string cmp, std::string mdl) : Car(std::move(cmp), std::move(mdl)) {
+        std::cout << "PassengerCar" << std::endl;
     }
+    ~PassengerCar() override = default;
 };
 
-class Circle: public Figure
+class Bus: virtual public Car
 {
-private:
-    float radius;
 public:
-    Circle(float rds) : radius(rds) {};
-    float area() override {
-        return radius * radius * (float)3.14;
+    Bus(std::string cmp, std::string mdl) : Car(std::move(cmp), std::move(mdl)) {
+        std::cout << "Bus" << std::endl;
     }
+    ~Bus() override = default;
 };
 
-class Rectangle: public Parallelogram
+class Minivan: public PassengerCar, public Bus
 {
 public:
-    Rectangle(float wdth, float hght) : Parallelogram(wdth, hght, (float)1.00) {}
-};
-
-
-class Square: public Parallelogram
-{
-public:
-    Square(float wdth) : Parallelogram(wdth, wdth, (float)1.00) {}
-};
-
-class Rhombus: public Parallelogram
-{
-public:
-    Rhombus(float wdth, float sin) : Parallelogram(wdth, wdth, sin) {}
+    Minivan(std::string cmp, std::string mdl) :
+    Car(std::move(cmp), std::move(mdl)),
+    Bus(std::move(cmp), std::move(mdl)),
+    PassengerCar(std::move(cmp), std::move(mdl))
+    {
+        std::cout << "Minivan" << std::endl;
+    }
+    ~Minivan() override = default;
 };
 
 int main() {
-    vector<Figure*> figures;
-    figures.push_back(new Parallelogram(4, 4, 0.85));
-    figures.push_back(new Circle(4));
-    figures.push_back(new Square(5));
-    figures.push_back(new Rectangle(3, 4));
-    figures.push_back(new Rhombus(6, 0.85));
-
-    for (Figure* figure : figures)
-    {
-        cout << figure->area() << endl;
-    }
+    std::cout << "Car initialize: " << std::endl;
+    Car car("Hundai", "po179xx");
+    std::cout << "PassengerCar initialize: " << std::endl;
+    PassengerCar pas_car("Lada", "ka1ina");
+    std::cout << "Bus initialize: " << std::endl;
+    Bus bus("Detstvo", "u98q");
+    std::cout << "Minivan initialize: " << std::endl;
+    Minivan minivan("Unico", "xsl3m");
     return 0;
 }
